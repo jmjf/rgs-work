@@ -1,0 +1,17 @@
+.character-profile {
+	margin: 1rem;
+}
+
+.character-profile img {
+    width: 75px;
+}
+
+.character-profile .info {
+   display: inline-block;
+   margin-left: 1rem;
+}
+
+.character-profile .info .name {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
