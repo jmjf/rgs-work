@@ -3,12 +3,13 @@
 }
 
 .character-profile img {
-    width: 75px;
+    width: 125px;
 }
 
 .character-profile .info {
    display: inline-block;
    margin-left: 1rem;
+   max-width: 45%;
 }
 
 .character-profile .info .name {
