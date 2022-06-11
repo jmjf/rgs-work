@@ -7,7 +7,7 @@ export interface CardListProps {
 export const CardList = (props: CardListProps) => {
    return (
       <div>
-         {props.data.map((p) => { return (<CharacterCard {...p.payload.character} key={p.payload.character.name} />); })}
+         {props.data.map((p) => { return (<CharacterCard {...p} key={p.name} />); })}
       </div>
    );
 }

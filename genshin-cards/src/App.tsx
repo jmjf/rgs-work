@@ -1,31 +1,20 @@
 import React from 'react';
+
+import { IGenshinCharacterData } from './adapters/GenshinApiAdapter';
+import { GenshinApiAdapter_GenshinAppApi } from './adapters/impl/GenshinApiAdapter-GenshinAppApi';
+
 import { CardList } from './components/CardList';
 import { UserInputForm } from './components/UserInputForm';
 import './App.css';
 
-interface ICharacterData {
-  error: boolean,
-    payload: {
-      character: {
-      name: string,
-      description: string,
-      element: string,
-      weaponType: string,
-      iconURL: string
-    }
-  }
-}
-
-// export const App = ({title}: AppProps) => {
-//   return (<div className="header">{title}</div>);
-// };
+const genshinApiAdapter = new GenshinApiAdapter_GenshinAppApi();
 
 export interface IAppProps {
   title: string;
 }
 
 export interface IAppState {
-  data: ICharacterData[];
+  data: IGenshinCharacterData[];
 }
 
 export class App extends React.Component<IAppProps, IAppState>{
@@ -34,7 +23,7 @@ export class App extends React.Component<IAppProps, IAppState>{
   };
 
   addData = (newData: any): boolean => {
-    const findResult = this.state.data.findIndex((c: ICharacterData) => { return (c.payload.character.name === newData.payload.character.name) });
+    const findResult = this.state.data.findIndex((c: IGenshinCharacterData) => { return (c.id === newData.id) });
     if (findResult === -1) {
       this.setState(prevState => { return { data: [...prevState.data, newData ]} });
       return true;
@@ -46,7 +35,7 @@ export class App extends React.Component<IAppProps, IAppState>{
     return (
       <div>
         <div className="header">{this.props.title}</div>
-        <UserInputForm onSubmit={this.addData}/>
+        <UserInputForm onSubmit={this.addData} apiAdapter={genshinApiAdapter}/>
         <CardList data={this.state.data}/>
       </div>
     );

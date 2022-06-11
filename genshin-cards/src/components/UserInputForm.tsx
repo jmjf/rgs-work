@@ -1,15 +1,12 @@
-import axios, { AxiosError } from 'axios';
 import React from 'react';
+
+import { IGenshinApiAdapter } from '../adapters/GenshinApiAdapter';
 import './UserInputForm.css';
 
 interface IFormProps {
-   onSubmit: (newData: any) => boolean;
-}
-
-type NotFoundError = {
-   error: boolean,
-   message: string
-}
+   onSubmit: (newData: any) => boolean,
+   apiAdapter: IGenshinApiAdapter
+};
 
 export class UserInputForm extends React.Component<IFormProps> {
    state = {
@@ -21,27 +18,15 @@ export class UserInputForm extends React.Component<IFormProps> {
       ev.preventDefault();
 
       let msg = '';
-      try {
-         const res = await axios.get(`https://genshin-app-api.herokuapp.com/api/characters/info/${this.state.name}?infoDataSize=minimal`);
 
-         if (res.data.error === false) {
-            if (this.props.onSubmit(res.data)) {
-               msg = `Added ${res.data.payload.character.name}`;
-            } else {
-               msg = `${res.data.payload.character.name} already on the list`;
-            }
-         } else {
-            msg = `${res.data.payload.character.name} already on the list`;
-         }
-      } catch (e) {
-         const err = e as AxiosError;
-
-         if (err.response?.status === 404) {
-            const notFoundError = err.response?.data as NotFoundError;
-            msg = `ERROR: ${this.state.name} - ${notFoundError.message}`;
-         } else {
-            msg = `ERROR: ${err.status} - ${err.message}`
-         }
+      const characterResult = await this.props.apiAdapter.getCharacter(this.state.name);
+      if (characterResult.isErr()) {
+         msg = characterResult.error.message;
+      } else {
+         msg = (this.props.onSubmit(characterResult.value)) 
+            ? `Added ${characterResult.value.name}.`
+            : `${characterResult.value.name} is already on the list.`
+         ;
       }
 
       this.setState({ name: '', statusMessage: msg });
