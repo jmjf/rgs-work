@@ -1,0 +1,21 @@
+form {
+   border: thin solid #ddd;
+   background-color: #fbfbfb;
+   padding: 2rem;
+   margin-left: 1rem;
+   margin-bottom: 2rem;
+   display: flex;
+   justify-content: center;
+   width: 50%;
+}
+
+input {
+   margin: 1rem;
+   width: 40%;
+   height: 1.7rem;
+}
+
+button {
+   height: 2rem;
+   align-self: center;
+}

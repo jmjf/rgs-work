@@ -1,16 +1,16 @@
 import React from 'react';
 import './CharacterCard.css';
 
-export interface CharacterCardProps {
+export interface ICharacterCardProps {
    name: string,
    element: string,
    weaponType: string,
    description: string,
    iconURL: string
 }
-export class CharacterCard extends React.Component {
+export class CharacterCard extends React.Component<ICharacterCardProps> {
    render() {
-      const charInfo = this.props as CharacterCardProps;
+      const charInfo = this.props;
       return(
          <div className="character-profile">
             <img src={charInfo.iconURL} alt="character icon"/>

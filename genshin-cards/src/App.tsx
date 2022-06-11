@@ -1,10 +1,7 @@
 import React from 'react';
 import { CardList } from './CardList';
+import { UserInputForm } from './UserInputForm';
 import './App.css';
-
-export interface AppProps {
-  title: string;
-}
 
 const testData = [
   {
@@ -61,12 +58,25 @@ const testData = [
 //   return (<div className="header">{title}</div>);
 // };
 
-export class App extends React.Component<AppProps>{
+export interface IAppProps {
+  title: string;
+}
+
+export interface IAppState {
+  data: any[];
+}
+
+export class App extends React.Component<IAppProps, IAppState>{
+  state = {
+    data: testData
+  };
+
   render() {
     return (
       <div>
         <div className="header">{this.props.title}</div>
-        <CardList data={testData}/>
+        <UserInputForm />
+        <CardList data={this.state.data}/>
       </div>
     );
   }
