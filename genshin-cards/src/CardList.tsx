@@ -6,10 +6,9 @@ export interface CardListProps {
 };
 
 export const CardList = (props: CardListProps) => {
-   console.log(props);
    return (
       <div>
-         {props.data.map((p) => { return (<CharacterCard {...p.payload.character} />); })}
+         {props.data.map((p) => { return (<CharacterCard {...p.payload.character} key={p.payload.character.name} />); })}
       </div>
    )
 }
