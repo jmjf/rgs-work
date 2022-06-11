@@ -1,6 +1,6 @@
 import React from 'react';
-import { CardList } from './CardList';
-import { UserInputForm } from './UserInputForm';
+import { CardList } from './components/CardList';
+import { UserInputForm } from './components/UserInputForm';
 import './App.css';
 
 interface ICharacterData {

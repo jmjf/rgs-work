@@ -6,7 +6,7 @@ interface IFormProps {
    onSubmit: (newData: any) => boolean;
 }
 
-type APIError = {
+type NotFoundError = {
    error: boolean,
    message: string
 }
@@ -34,9 +34,16 @@ export class UserInputForm extends React.Component<IFormProps> {
             msg = `${res.data.payload.character.name} already on the list`;
          }
       } catch (e) {
-         const err = ((e as AxiosError).response?.data) as APIError
-         msg = `ERROR: ${this.state.name} - ${err.message}`;
+         const err = e as AxiosError;
+
+         if (err.response?.status === 404) {
+            const notFoundError = err.response?.data as NotFoundError;
+            msg = `ERROR: ${this.state.name} - ${notFoundError.message}`;
+         } else {
+            msg = `ERROR: ${err.status} - ${err.message}`
+         }
       }
+
       this.setState({ name: '', statusMessage: msg });
    }
 
