@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { GameMath } from '../utils/GameMath'
+import { IconPanel } from './IconPanel';
+import { NumberButton } from './NumberButton';
 
 export const GameBoard = () => {
    const [icos, setIcos] = useState(GameMath.random(1, 9));
@@ -7,17 +9,15 @@ export const GameBoard = () => {
    return (
      <div className="game">
        <div className="help">
-         Pick 1 or more numbers that sum to the number of Intertwined Fates
+         Pick 1 or more numbers that sum to the number of images
        </div>
        <div className="body">
          <div className="left">
-            {GameMath.getArrayRange(1, icos).map(id => {
-               return (<div key={id} className="ico" />);
-            })}
+            <IconPanel iconCount={icos} />
          </div>
          <div className="right">
             {GameMath.getArrayRange(1, 9).map(num => {
-               return (<button key={num} className="number">{num}</button>);
+               return (<NumberButton key={num} number={num} />);
             })}
          </div>
        </div>
