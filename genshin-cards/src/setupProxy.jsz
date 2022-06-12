@@ -1,0 +1,31 @@
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const morgan = require("morgan");
+
+function lp(provider) {
+   return {
+      log: console.log,
+      debug: console.log,
+      info: console.log,
+      warn: console.log,
+      error: console.log
+   }
+}
+
+module.exports = function(app) {
+   app.use(
+      '/api',
+      createProxyMiddleware({
+         target: 'http://impact.moe',
+         changeOrigin: true,
+         logLevel: 'debug',
+         logProvider: lp,
+         onProxyRes: function (proxyRes, req, res) {
+            console.log('proxy headers', proxyRes.headers);
+            console.log('proxy body', proxyRes.body);
+            
+            proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+         }
+      })
+   );
+   app.use(morgan('combined'));
+}

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { IGenshinCharacterData } from './adapters/GenshinApiAdapter';
 import { GenshinApiAdapter_GenshinAppApi } from './adapters/impl/GenshinApiAdapter-GenshinAppApi';
+import { GenshinApiAdapter_ImpactMoe } from './adapters/impl/GenshinApiAdapter-ImpactMoe';
 
 import { CardList } from './components/CardList';
 import { UserInputForm } from './components/UserInputForm';
