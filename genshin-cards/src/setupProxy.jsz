@@ -1,4 +1,5 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
+//const axios = require("axios").default;
+const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
 const morgan = require("morgan");
 
 function lp(provider) {
@@ -12,19 +13,38 @@ function lp(provider) {
 }
 
 module.exports = function(app) {
+   // app.get(
+   //    '/devapi/:restOfRoute',
+   //    (req, res) => {
+   //       console.log('devapi', req.params);
+   //       axios.get(`https://impact.moe/${req.params.restOfRoute}`)
+   //          .then(axiosRes => {
+   //             console.log('impact.moe data', axiosRes.data);
+   //             console.log('impact.moe headers', axiosRes.headers);
+   //             axiosRes.headers['Access-Control-Allow-Origin'] = '*';
+   //             console.log('after change', axiosRes.headers);
+   //             res.send(axiosRes);
+   //          })
+   //          .catch(e => {
+   //             console.log('error', e);
+   //          });
+   //    }
+   // );
+
    app.use(
       '/api',
       createProxyMiddleware({
-         target: 'http://impact.moe',
+         target: 'https://cors-anywhere.herokuapp.com/corsdemo/https://impact.moe',
          changeOrigin: true,
-         logLevel: 'debug',
-         logProvider: lp,
-         onProxyRes: function (proxyRes, req, res) {
-            console.log('proxy headers', proxyRes.headers);
-            console.log('proxy body', proxyRes.body);
-            
-            proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-         }
+         // followRedirects: true,
+         // selfHandleResponse: true,
+         // logLevel: 'debug',
+         // logProvider: lp,
+         // onproxyRes: responseInterceptor(async(responseBuffer, proxyRes, req, res) => {
+         //    res.setHeader('Access-Control-Allow-Origin', '*');
+         //    lp.log('proxy res header', res.headers);
+         //    return res;
+         // })
       })
    );
    app.use(morgan('combined'));

@@ -8,7 +8,7 @@ import { CardList } from './components/CardList';
 import { UserInputForm } from './components/UserInputForm';
 import './App.css';
 
-const genshinApiAdapter = new GenshinApiAdapter_GenshinAppApi();
+const genshinApiAdapter = new GenshinApiAdapter_ImpactMoe();
 
 export interface IAppProps {
   title: string;

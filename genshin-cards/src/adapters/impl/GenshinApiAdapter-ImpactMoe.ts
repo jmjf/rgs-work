@@ -9,7 +9,7 @@ type NotFoundError = {
 
 const apiUrlPrefix = (process.env.NODE_ENV === 'production')
    ? `https://impact.moe`
-   : ''
+   : 'https://cors-anywhere.herokuapp.com/https://impact.moe'
 ;
 
 export class GenshinApiAdapter_ImpactMoe implements IGenshinApiAdapter {
