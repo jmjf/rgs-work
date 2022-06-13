@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GameMath } from '../utils/GameMath'
 import { IconPanel } from './IconPanel';
 import { NumberButton } from './NumberButton';
-import { ResetButton } from './ResetGame';
+import { ResetGamePanel } from './ResetGamePanel';
 
 import './GameBoard.css';
+
+const START_SECONDS = 10;
 
 export const GameBoard = () => {
    const [iconCount, setIconCount] = useState(GameMath.random(1, 9));
@@ -12,15 +14,29 @@ export const GameBoard = () => {
    const [availableNumbers, setAvailableNumbers] = useState(GameMath.arrayRange(1, 9));
    // selectedNumbers -> numbers clicked this turn -- if sum of selected > iconCount, they're wrong
    const [selectedNumbers, setSelectedNumbers] = useState([] as number[]);
+   const [remainingSecondsCount, setRemainingSecondsCount] = useState(START_SECONDS);
+
+   // run the timer (decrement every second)
+   useEffect(() => {
+      if (remainingSecondsCount > 0 && availableNumbers.length > 0) {
+         const timerId = setTimeout(() => {
+            setRemainingSecondsCount(remainingSecondsCount - 1);
+         }, 1000);
+         // when the component unmounts, this will run -- issue: allows a cheat
+         return () => clearTimeout(timerId);
+      }
+   });
 
    const isSelectedWrong = (GameMath.sum(selectedNumbers) > iconCount);
-   const isGameOver = (availableNumbers.length === 0);
+   const gameStatus = (availableNumbers.length === 0)
+      ? 'win'
+      : (remainingSecondsCount === 0) ? 'lose' : 'playing';
 
    const initializeGame = () => {
       setIconCount(GameMath.random(1, 9));
       setAvailableNumbers(GameMath.arrayRange(1, 9));
       setSelectedNumbers([]);
-   }
+   };
 
    const calcNumberButtonStatus = (n: number): string => {
       // if it's used, it can't be anything else
@@ -34,7 +50,7 @@ export const GameBoard = () => {
    };
 
    const onNumberClick = (num: number, status: string) => {
-      if (status === 'used') return;
+      if (status === 'used' || gameStatus !== 'playing') return;
 
       const newSelectedNumbers = 
          status === 'available'
@@ -49,8 +65,7 @@ export const GameBoard = () => {
          setAvailableNumbers(newAvailableNumbers);
          setSelectedNumbers([]);
       }
-
-   }
+   };
 
    return (
      <div className="game">
@@ -59,8 +74,8 @@ export const GameBoard = () => {
        </div>
        <div className="body">
          <div className="left">
-            {isGameOver 
-               ? (<ResetButton onClick={initializeGame}/>)
+            {(gameStatus !== 'playing')
+               ? (<ResetGamePanel onClick={initializeGame} gameStatus={gameStatus} />)
                : (<IconPanel iconCount={iconCount} />)
             }
             
@@ -77,7 +92,7 @@ export const GameBoard = () => {
             })}
          </div>
        </div>
-       <div className="timer">Time Remaining: 10</div>
+       <div className="timer">Time Remaining: {remainingSecondsCount}</div>
      </div>
    );
  };
