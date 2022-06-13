@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { GameMath } from '../utils/GameMath'
 import { IconPanel } from './IconPanel';
 import { NumberButton } from './NumberButton';
+import { ResetButton } from './ResetGame';
+
+import './GameBoard.css';
 
 export const GameBoard = () => {
    const [iconCount, setIconCount] = useState(GameMath.random(1, 9));
@@ -10,14 +13,21 @@ export const GameBoard = () => {
    // selectedNumbers -> numbers clicked this turn -- if sum of selected > iconCount, they're wrong
    const [selectedNumbers, setSelectedNumbers] = useState([] as number[]);
 
-   const isSelectedWrong = () => (GameMath.sum(selectedNumbers) > iconCount);
+   const isSelectedWrong = (GameMath.sum(selectedNumbers) > iconCount);
+   const isGameOver = (availableNumbers.length === 0);
+
+   const initializeGame = () => {
+      setIconCount(GameMath.random(1, 9));
+      setAvailableNumbers(GameMath.arrayRange(1, 9));
+      setSelectedNumbers([]);
+   }
 
    const calcNumberButtonStatus = (n: number): string => {
       // if it's used, it can't be anything else
       if (!availableNumbers.includes(n)) return 'used';
 
       if (selectedNumbers.includes(n)) {
-         return isSelectedWrong() ? 'wrong' : 'selected'
+         return isSelectedWrong ? 'wrong' : 'selected'
       }
       // if it's none of the above, it must be available
       return 'available';
@@ -30,7 +40,7 @@ export const GameBoard = () => {
          status === 'available'
             ? selectedNumbers.concat(num)
             : selectedNumbers.filter(n => n !== num);
-            
+
       if (GameMath.sum(newSelectedNumbers) !== iconCount) {
          setSelectedNumbers(newSelectedNumbers);
       } else {
@@ -49,7 +59,11 @@ export const GameBoard = () => {
        </div>
        <div className="body">
          <div className="left">
-            <IconPanel iconCount={iconCount} />
+            {isGameOver 
+               ? (<ResetButton onClick={initializeGame}/>)
+               : (<IconPanel iconCount={iconCount} />)
+            }
+            
          </div>
          <div className="right">
             {GameMath.arrayRange(1, 9).map(num => {

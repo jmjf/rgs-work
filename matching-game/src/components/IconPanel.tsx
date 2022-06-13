@@ -1,4 +1,5 @@
 import { GameMath } from '../utils/GameMath';
+import './IconPanel.css';
 
 interface IIconPanelProps {
    iconCount: number

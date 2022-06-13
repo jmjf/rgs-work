@@ -1,4 +1,4 @@
-import React from 'react';
+import './NumberButton.css';
 
 interface INumberButtonProps {
    number: number,

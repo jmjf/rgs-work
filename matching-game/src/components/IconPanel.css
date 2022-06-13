@@ -1,0 +1,8 @@
+.ico {
+	display: inline-block;
+  background:url('../assets/Item_Intertwined_Fate.webp');
+  background-size: cover;
+  width: 48px;
+  height: 48px;
+  margin: 10px 10px;
+}
