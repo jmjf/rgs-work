@@ -3,6 +3,7 @@ import React from 'react';
 interface INumberButtonProps {
    number: number,
    buttonStatus: string
+   onClick: (num: number, status: string) => void
 }
 
 type Dictionary = { [index: string]: string };
@@ -19,7 +20,7 @@ export const NumberButton = (props: INumberButtonProps) => {
       <button 
          className="number"
          style={{ backgroundColor: colors[props.buttonStatus] }}
-         onClick={() => console.log('Num', props.number)}
+         onClick={() => props.onClick(props.number, props.buttonStatus)}
       >
          {props.number}
       </button>

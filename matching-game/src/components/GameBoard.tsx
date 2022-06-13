@@ -11,7 +11,6 @@ export const GameBoard = () => {
    const [selectedNumbers, setSelectedNumbers] = useState([] as number[]);
 
    const isSelectedWrong = () => (GameMath.sum(selectedNumbers) > iconCount);
-   const isSelectedRight = () => (GameMath.sum(selectedNumbers) === iconCount);
 
    const calcNumberButtonStatus = (n: number): string => {
       // if it's used, it can't be anything else
@@ -19,11 +18,29 @@ export const GameBoard = () => {
 
       if (selectedNumbers.includes(n)) {
          return isSelectedWrong() ? 'wrong' : 'selected'
-
       }
       // if it's none of the above, it must be available
       return 'available';
    };
+
+   const onNumberClick = (num: number, status: string) => {
+      if (status === 'used') return;
+
+      const newSelectedNumbers = 
+         status === 'available'
+            ? selectedNumbers.concat(num)
+            : selectedNumbers.filter(n => n !== num);
+            
+      if (GameMath.sum(newSelectedNumbers) !== iconCount) {
+         setSelectedNumbers(newSelectedNumbers);
+      } else {
+         const newAvailableNumbers = availableNumbers.filter(n => !newSelectedNumbers.includes(n));
+         setIconCount(GameMath.randomSumIn(newAvailableNumbers, 9));
+         setAvailableNumbers(newAvailableNumbers);
+         setSelectedNumbers([]);
+      }
+
+   }
 
    return (
      <div className="game">
@@ -41,6 +58,7 @@ export const GameBoard = () => {
                      key={num}
                      number={num}
                      buttonStatus={calcNumberButtonStatus(num)}
+                     onClick={onNumberClick}
                   />);
             })}
          </div>
