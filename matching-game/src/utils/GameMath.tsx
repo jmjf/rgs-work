@@ -4,7 +4,7 @@ export const GameMath = {
    sum: (arr: number[]) => arr.reduce((acc, curr) => acc + curr, 0),
  
    // create an array of numbers between min and max (edges included)
-   getArrayRange: (min: number, max: number) => Array.from({ length: max - min + 1 }, (_, i) => min + i),
+   arrayRange: (min: number, max: number) => Array.from({ length: max - min + 1 }, (_, i) => min + i),
  
    // pick a random number between min and max (edges included)
    random: (min:number, max:number) => min + Math.floor(Math.random() * (max - min + 1)),

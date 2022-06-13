@@ -7,7 +7,7 @@ interface IIconPanelProps {
 export const IconPanel = (props: IIconPanelProps) => {
    return (
       <>
-         {GameMath.getArrayRange(1, props.iconCount).map(id => {
+         {GameMath.arrayRange(1, props.iconCount).map(id => {
             return (<div key={id} className="ico" />);
          })}
       </>
