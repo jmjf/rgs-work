@@ -1,14 +1,15 @@
 import React from 'react';
 
-import { GameBoard } from './components/GameBoard';
+import { CountThePaimons } from './components/CountThePaimons';
 
 import './App.css';
+
 
 
 function App() {
   return (
     <div>
-      {GameBoard()}
+      {CountThePaimons()}
     </div>
   );
 }

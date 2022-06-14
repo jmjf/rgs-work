@@ -10,7 +10,7 @@ export const ResetGamePanel = (props: IResetGamePanelProps) => {
       <div className="game-over">
          <p 
             className="message"
-            style={{ color: props.gameStatus === 'win' ? 'green' : 'black' }}
+            style={{ color: props.gameStatus === 'win' ? 'lawngreen' : 'white' }}
          >
             {props.gameStatus === 'win'
                ? 'You win!'

@@ -8,7 +8,11 @@ import './GameBoard.css';
 
 const START_SECONDS = 10;
 
-export const GameBoard = () => {
+interface IGameBoardProps {
+   resetGame: () => void;
+}
+
+export const GameBoard = (props: IGameBoardProps) => {
    const [iconCount, setIconCount] = useState(GameMath.random(1, 9));
    // availableNumbers -> numbers left to choose from
    const [availableNumbers, setAvailableNumbers] = useState(GameMath.arrayRange(1, 9));
@@ -31,12 +35,6 @@ export const GameBoard = () => {
    const gameStatus = (availableNumbers.length === 0)
       ? 'win'
       : (remainingSecondsCount === 0) ? 'lose' : 'playing';
-
-   const initializeGame = () => {
-      setIconCount(GameMath.random(1, 9));
-      setAvailableNumbers(GameMath.arrayRange(1, 9));
-      setSelectedNumbers([]);
-   };
 
    const calcNumberButtonStatus = (n: number): string => {
       // if it's used, it can't be anything else
@@ -70,12 +68,12 @@ export const GameBoard = () => {
    return (
      <div className="game">
        <div className="help">
-         Pick 1 or more numbers that sum to the number of images
+         Pick 1 or more numbers that sum to the number of Paimons.
        </div>
        <div className="body">
          <div className="left">
             {(gameStatus !== 'playing')
-               ? (<ResetGamePanel onClick={initializeGame} gameStatus={gameStatus} />)
+               ? (<ResetGamePanel onClick={props.resetGame} gameStatus={gameStatus} />)
                : (<IconPanel iconCount={iconCount} />)
             }
             
