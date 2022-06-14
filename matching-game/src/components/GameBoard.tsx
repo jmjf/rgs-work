@@ -10,9 +10,17 @@ const START_SECONDS = 10;
 
 interface IGameBoardProps {
    resetGame: () => void;
-}
+};
 
-export const GameBoard = (props: IGameBoardProps) => {
+interface IGameBoardState {
+   iconCount: number,
+   availableNumbers: number[],
+   selectedNumbers: number[],
+   remainingSecondsCount: number,
+   setGameBoardState: (newSelectedNumbers: number[]) => void;
+};
+
+const useGameBoardState = (): IGameBoardState => {
    const [iconCount, setIconCount] = useState(GameMath.random(1, 9));
    // availableNumbers -> numbers left to choose from
    const [availableNumbers, setAvailableNumbers] = useState(GameMath.arrayRange(1, 9));
@@ -30,6 +38,35 @@ export const GameBoard = (props: IGameBoardProps) => {
          return () => clearTimeout(timerId);
       }
    });
+
+   const setGameBoardState = (newSelectedNumbers: number[]) => {
+      if (GameMath.sum(newSelectedNumbers) !== iconCount) {
+         setSelectedNumbers(newSelectedNumbers);
+      } else {
+         const newAvailableNumbers = availableNumbers.filter(n => !newSelectedNumbers.includes(n));
+         setIconCount(GameMath.randomSumIn(newAvailableNumbers, 9));
+         setAvailableNumbers(newAvailableNumbers);
+         setSelectedNumbers([]);
+      }
+   }
+
+   return {
+      iconCount,
+      availableNumbers,
+      selectedNumbers,
+      remainingSecondsCount,
+      setGameBoardState
+   }
+}
+
+export const GameBoard = (props: IGameBoardProps) => {
+   const {
+      iconCount,
+      availableNumbers,
+      selectedNumbers,
+      remainingSecondsCount,
+      setGameBoardState
+   } = useGameBoardState();
 
    const isSelectedWrong = (GameMath.sum(selectedNumbers) > iconCount);
    const gameStatus = (availableNumbers.length === 0)
@@ -55,14 +92,7 @@ export const GameBoard = (props: IGameBoardProps) => {
             ? selectedNumbers.concat(num)
             : selectedNumbers.filter(n => n !== num);
 
-      if (GameMath.sum(newSelectedNumbers) !== iconCount) {
-         setSelectedNumbers(newSelectedNumbers);
-      } else {
-         const newAvailableNumbers = availableNumbers.filter(n => !newSelectedNumbers.includes(n));
-         setIconCount(GameMath.randomSumIn(newAvailableNumbers, 9));
-         setAvailableNumbers(newAvailableNumbers);
-         setSelectedNumbers([]);
-      }
+      setGameBoardState(newSelectedNumbers);
    };
 
    return (
